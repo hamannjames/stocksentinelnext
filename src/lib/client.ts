@@ -3,7 +3,7 @@ import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rs
 import { graphql_uri } from "./config"
 import 'dotenv/config';
 import { MongoClient } from 'mongodb';
-const connString: string = process.env.COSMOSDB_CONNECTION_STRING;
+const connString: string = process.env.COSMOSDB_CONNECTION_STRING!;
 
 let client: MongoClient | null = null;
 
