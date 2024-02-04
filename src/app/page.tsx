@@ -7,10 +7,10 @@ export default async function Home() {
 
   const cursor = await client.db('stocksentinel').collection('transactors').find();
   const data = await cursor.toArray();
-  console.log(data)
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <h1>Great things coming! Check back here for some juicy stock details. Estimated timeline to stock content: 2-15-24</h1>
       {data.map(s => <div key={s['bio_id']}>
         <h2>Senator {s.full_name}</h2>
         <p>Party: {s.party}</p>
