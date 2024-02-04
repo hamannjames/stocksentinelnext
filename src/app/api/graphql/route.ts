@@ -10,7 +10,7 @@ const resolvers = {
 }
 
 const typeDefs = gql`
-    type: Query {
+    type Query {
         hello: String
     }
 `
@@ -21,7 +21,7 @@ const server = new ApolloServer({
 })
 
 const handler = startServerAndCreateNextHandler<NextRequest>(server, {
-    context: async req => ({req})
+    context: async req => ({req}),
 })
 
 export { handler as GET, handler as POST };
