@@ -13,6 +13,7 @@
     "@apollo/experimental-nextjs-app-support": "^0.8.0",
     "@apollo/server": "^4.10.0",
     "@as-integrations/next": "^3.0.0",
+    "@react-spring/web": "^9.7.3",
     "dotenv": "^16.4.1",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
