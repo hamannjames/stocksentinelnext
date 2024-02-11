@@ -1,6 +1,3 @@
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc"
-import { graphql_uri } from "./config"
 import 'dotenv/config';
 import { MongoClient } from 'mongodb';
 const connString: string = process.env.COSMOSDB_CONNECTION_STRING!;
