@@ -1,7 +1,17 @@
-export interface Query {
+export type Query = [{$match: MatchQuery}, SkipQuery?: {}, LimitQuery?: {}]
+
+export interface SkipQuery {
+    $skip: number
+}
+
+export interface LimitQuery {
+    $limit: number
+}
+
+export interface MatchQuery {
     transaction_date?: {
-        $gte?: Date
-        $lte?: Date
+        $gte?: Number
+        $lte?: Number
     }
     'transactor.bio_id'?: {
         bio_id: string
@@ -11,36 +21,41 @@ export interface Query {
     type?: string
 }
 
-export default function queryBuilder(searchParams: URLSearchParams) {
-    const { start, end, transactor, ticker, party, type } = Object.fromEntries(searchParams.entries());
+export default function queryBuilder(searchParams: URLSearchParams): Query {
+    const { start, end, transactor, ticker, party, type, page = '1', per_page = '20' } = Object.fromEntries(searchParams.entries());
 
-    const query: Query = {}
+    const match: MatchQuery = {}
 
     if (start) {
-        query['transaction_date'] = { $gte: new Date(start) }
+        match['transaction_date'] = { $gte: (new Date(start)).getTime() }
     }
 
     if (end) {
-        query['transaction_date'] = { ...query['transaction_date'], $lte: new Date(end) }
+        match['transaction_date'] = { ...match['transaction_date'], $lte: (new Date(end)).getTime() }
     }
 
     if (transactor) {
-        query['transactor.bio_id'] = { bio_id: transactor }
+        match['transactor.bio_id'] = { bio_id: transactor }
     }
 
     if (ticker) {
-        query['ticker'] = ticker
+        match['ticker'] = ticker
     }
 
     if (party) {
-        query['transactor.party'] = party
+        match['transactor.party'] = party
     }
 
     if (type) {
-        query['type'] = type
+        match['type'] = type
     }
 
-    console.log(query)
+    const query: Query = [{$match: match}]
 
-    return query;
+    if (page) {
+        query.push({ $skip: (parseInt(page) - 1) * parseInt(per_page) })
+        query.push({ $limit: parseInt(per_page) })
+    }
+
+    return query
 }
