@@ -1,4 +1,4 @@
-export type Query = [{$match: MatchQuery}, SkipQuery?: {}, LimitQuery?: {}]
+export type Query = [{$match: MatchQuery}, {$sort: {}}, SkipQuery?: {}, LimitQuery?: {}]
 
 export interface SkipQuery {
     $skip: number
@@ -21,8 +21,20 @@ export interface MatchQuery {
     type?: string
 }
 
+interface SearchParams {
+    start?: string
+    end?: string
+    transactor?: string
+    ticker?: string
+    party?: string
+    type?: string
+    page?: string
+    per_page?: string
+    sort?: string
+}
+
 export default function queryBuilder(searchParams: URLSearchParams): Query {
-    const { start, end, transactor, ticker, party, type, page = '1', per_page = '20' } = Object.fromEntries(searchParams.entries());
+    const { sort, start, end, transactor, ticker, party, type, page = '1', per_page = '20' } = searchParams as SearchParams
 
     const match: MatchQuery = {}
 
@@ -50,7 +62,7 @@ export default function queryBuilder(searchParams: URLSearchParams): Query {
         match['type'] = type
     }
 
-    const query: Query = [{$match: match}]
+    const query: Query = [{$match: match}, {$sort: {'transaction_date': 1}}]
 
     if (page) {
         query.push({ $skip: (parseInt(page) - 1) * parseInt(per_page) })

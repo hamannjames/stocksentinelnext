@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const client = await getClient();
     const searchParams = new URLSearchParams((new URL(request.url).search.slice(1)))
 
-    const query = queryBuilder(searchParams);
+    const query = queryBuilder(searchParams as any);
 
     const match = query[0]['$match'];
 
