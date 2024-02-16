@@ -33,7 +33,7 @@ interface SearchParams {
     sort?: string
 }
 
-export default function queryBuilder(searchParams: URLSearchParams): Query {
+export default function queryBuilder(searchParams: any): Query {
     const { sort, start, end, transactor, ticker, party, type, page = '1', per_page = '20' } = searchParams as SearchParams
 
     const match: MatchQuery = {}
