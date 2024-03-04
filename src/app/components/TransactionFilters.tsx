@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 export default function TransactionFilters() {
     const searchParams = useSearchParams();
     const pathname = usePathname()
-    const {replace} = useRouter()
+    const {replace, push} = useRouter()
 
     const handleChage = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const params = new URLSearchParams(searchParams)

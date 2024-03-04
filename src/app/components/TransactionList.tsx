@@ -1,12 +1,14 @@
 import { config } from "@/lib/config";
 import { TransactionResponse } from "../api/transactions/route";
-import queryBuilder from "@/lib/queryBuilder";
+import queryBuilder, { Query } from "@/lib/queryBuilder";
 import { getClient } from "@/lib/client";
 import { EstimatedDocumentCountOptions } from "mongodb";
 import { ReactNode } from "react";
 import { Transaction } from "./TransactionTable";
+import getTransactions from "@/lib/getTransactions";
 
-export default async function TransactionList({items, page = '1', perPage='20'}: {items: Transaction[], page: string, perPage: string}) {
+export default async function TransactionList({query, page = '1', perPage='20'}: {query: Query, page: string, perPage: string}) {
+    const transactions = await getTransactions(query);
     const pageNum = parseInt(page);
     const perPageNum = parseInt(perPage);
     
@@ -23,7 +25,7 @@ export default async function TransactionList({items, page = '1', perPage='20'}:
                     <span>Transaction Type</span>
                     <span className="col-span-2">Comment</span>
                 </li>
-                {items.map((t, i) => 
+                {transactions.map((t, i) => 
                     <li 
                         key={t._id.toString()}
                         className={`grid grid-cols-9 px-8 py-4 border-b-2 border-b-gray/25 border-solid gap-4 ${i % 2 === 0 ? 'bg-gray-200' : ''    }`}

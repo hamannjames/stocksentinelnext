@@ -1,7 +1,12 @@
+import getCount from "@/lib/fetchCount";
+import getSearchParams from "@/lib/getSearchParams";
+import { LimitQuery, Query, SkipQuery } from "@/lib/queryBuilder";
 import Link from "next/link";
 import { parse } from "path";
 
-export default function TransactionPagination({search, count}: {search: Record<string, string>, count: number}) {
+export default async function TransactionPagination({query, search}: {query: Query, search: any}) {
+    const count = await getCount(query);
+
     const {per_page = '20', page = '1'} = search;
     const max = Math.ceil(count/parseInt(per_page));
 
@@ -20,32 +25,6 @@ export default function TransactionPagination({search, count}: {search: Record<s
                 {parseInt(page) > 1 &&
                     <li>
                         <Link href={`/?${buildParams(parseInt(page) - 1)}`}>Previous</Link>
-                    </li>
-                }
-                {
-                    parseInt(page) > 1 && max > 5 &&
-                    <li>
-                        ...
-                    </li>
-                }
-                {
-                    Array.from(Array(Math.min(max, 5))).map((_, i) => 
-                        <li key={i}>
-                            <Link 
-                                className={`${i + Math.min(i + parseInt(page), max - Math.min(max, 5) + i + 1) === parseInt(page) ? 'underline pointer-events-none' : ''}`} 
-                                href={`/?${buildParams(
-                                    Math.min(i + parseInt(page), max - Math.min(max, 5) + i + 1)
-                                )}`}
-                            >
-                                {Math.min(i + parseInt(page), max - Math.min(max, 5) + i + 1)}
-                            </Link>
-                        </li>
-                    )
-                }
-                {
-                    max > 5 && max - parseInt(page) >= 5 &&
-                    <li>
-                        ...
                     </li>
                 }
                 {parseInt(page) < max &&
