@@ -16,9 +16,9 @@ export interface MatchQuery {
     'transactor.bio_id'?: {
         bio_id: string
     }
-    ticker?: string
+    ticker?: string | {}
     'transactor.party'?: string
-    type?: string
+    type?: string | {}
 }
 
 interface SearchParams {
@@ -40,6 +40,10 @@ export default function queryBuilder(searchParams: any): Query {
 
     if (start) {
         match['transaction_date'] = { $gte: (new Date(start)).getTime() }
+    } else {
+        const start = new Date()
+        start.setDate(start.getDate() - 60)
+        match['transaction_date'] = { $gte: start.getTime() }
     }
 
     if (end) {
@@ -61,6 +65,9 @@ export default function queryBuilder(searchParams: any): Query {
     if (type) {
         match['type'] = type
     }
+
+    match['ticker'] = {$not: {$eq: '--'}}
+    match['type'] = {$not: {$eq: 'Exchange'}}
 
     const query: Query = [{$match: match}, {$sort: {'transaction_date': 1}}]
 

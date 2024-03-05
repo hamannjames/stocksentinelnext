@@ -7,6 +7,13 @@ export default function TransactionFilters() {
     const pathname = usePathname()
     const {replace, push} = useRouter()
 
+    const defaultDate = new Date();
+    defaultDate.setDate(defaultDate.getDate() - 60)
+
+    const formatDate = (date: Date) => {
+        return date.toISOString().split('T')[0]
+    }
+
     const handleChage = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const params = new URLSearchParams(searchParams)
 
@@ -22,7 +29,7 @@ export default function TransactionFilters() {
     return (
         <div className="flex gap-4">
             <label htmlFor="start">Start Date</label>
-            <input type="date" name="start" defaultValue={searchParams.get('start')?.toString()} onChange={handleChage} />
+            <input type="date" name="start" defaultValue={searchParams.get('start')?.toString() || formatDate(defaultDate)} onChange={handleChage} />
             <label htmlFor="end">End Date</label>
             <input type="date" name="end" defaultValue={searchParams.get('end')?.toString()} onChange={handleChage} />
             <label htmlFor="party">Party</label>

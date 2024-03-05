@@ -17,26 +17,18 @@ export default async function TransactionPagination({query, search}: {query: Que
     return (
         <div>
             <ul className="flex gap-4">
-                {max > 5 && parseInt(page) > 1 &&
-                    <li>
-                        <Link href={`/?${buildParams(1)}`}>First</Link>
-                    </li>
-                }
-                {parseInt(page) > 1 &&
-                    <li>
-                        <Link href={`/?${buildParams(parseInt(page) - 1)}`}>Previous</Link>
-                    </li>
-                }
-                {parseInt(page) < max &&
-                    <li>
-                        <Link href={`/?${buildParams(parseInt(page) + 1)}`}>Next</Link>
-                    </li>
-                }
-                {max > 5 && parseInt(page) < max &&
-                    <li>
-                        <Link href={`/?${buildParams(max)}`}>Last</Link>
-                    </li>
-                }
+                <li>
+                    {max > 5 && parseInt(page) > 1 ? <Link href={`/?${buildParams(1)}`}>First</Link> : <span className="text-gray-500">First</span> }
+                </li>
+                <li>
+                    {parseInt(page) > 1 ? <Link href={`/?${buildParams(parseInt(page) - 1)}`}>Previous</Link> : <span className="text-gray-500">Previous</span> }
+                </li>
+                <li>
+                    {parseInt(page) < max ? <Link href={`/?${buildParams(parseInt(page) + 1)}`}>Next</Link> : <span className="text-gray-500">Next</span> }
+                </li>
+                <li>
+                    {max > 5 && parseInt(page) < max ? <Link href={`/?${buildParams(max)}`}>Last</Link> : <span className="text-gray-500">Last</span>}
+                </li>
             </ul>
         </div>
     )
